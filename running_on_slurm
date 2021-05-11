@@ -1,0 +1,28 @@
+Steps to build an image and run it on slurm
+
+login bioinf:
+ssh dbortone@login.bioinf.unc.edu
+srun --pty  -c 2 --mem 1g -p docker bash
+what does partition do?
+export DOCKER_HOST=tcp://docker.bioinf.unc.edu:10000
+
+cd /datastore/alldata/shiny-server/rstudio-common/dbortone/docker/mixcr/mixcr_2.1.7_amplicon
+
+build on docker registry server:
+docker build -t dockerreg.bioinf.unc.edu:5000/mixcr_2.1.7_amplicon:1 .
+
+push to docker registry server:
+docker push dockerreg.bioinf.unc.edu:5000/mixcr_2.1.7_amplicon:1
+
+then exit and run on bioinf
+
+mkdir -p /datastore/nextgenout2/share/labs/imgf/datasets/Sharpless_IP61/mixcr/AE001-1T-SH-TCR_CGTACTAG-TAGATCGC_S3_L001/
+chmod 777 /datastore/nextgenout2/share/labs/imgf/datasets/Sharpless_IP61/mixcr/AE001-1T-SH-TCR_CGTACTAG-TAGATCGC_S3_L001/
+sbatch AE001-1T-SH-TCR_CGTACTAG-TAGATCGC_S3_L001.job
+
+submit job fomr outside the docker partician
+
+sinfo --long -N
+squeue -l
+scancel 17854
+watch squeue
